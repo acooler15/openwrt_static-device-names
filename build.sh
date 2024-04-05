@@ -1,14 +1,16 @@
 #/bin/bash
-INSTALL_BIN="install -oroot -groot -m0755"
-INSTALL_SUID="install -oroot -groot -m4755"
-INSTALL_DIR="install -oroot -groot -d -m0755"
-INSTALL_DATA="install -oroot -groot -m0644"
-INSTALL_CONF="install -oroot -groot -m0600"
+LANG=en_us.UTF8
+[ -n "$GITHUB_WORKSPACE" ] || GITHUB_WORKSPACE=$(pwd)
+INSTALL_BIN="fakeroot install -oroot -groot -m0755"
+INSTALL_SUID="fakeroot install -oroot -groot -m4755"
+INSTALL_DIR="fakeroot install -oroot -groot -d -m0755"
+INSTALL_DATA="fakeroot install -oroot -groot -m0644"
+INSTALL_CONF="fakeroot install -oroot -groot -m0600"
 # TAG=${GITHUB_REF#refs/tags/}
 # echo ::set-output name=tag_name::${TAG}
 [ -d /tmp/static-device-names ] && rm -rf /tmp/static-device-names
-mkdir /tmp/static-device-names && cd /tmp/static-device-names && $INSTALL_DIR etc/init.d/ etc/hotplug.d/net/ usr/share/doc/static-device-names/ CONTROL && cd $GITHUB_WORKSPACE
-[ -f $GITHUB_WORKSPACE/files/static-device-names.config ] && $INSTALL_CONF $GITHUB_WORKSPACE/files/static-device-names.config /tmp/static-device-names/etc/init.d/static-device-names
+mkdir /tmp/static-device-names && cd /tmp/static-device-names && $INSTALL_DIR etc/init.d/ etc/config/ etc/hotplug.d/net/ usr/share/doc/static-device-names/ CONTROL && cd $GITHUB_WORKSPACE
+[ -f $GITHUB_WORKSPACE/files/static-device-names.config ] && $INSTALL_CONF $GITHUB_WORKSPACE/files/static-device-names.config /tmp/static-device-names/etc/config/static-device-names
 [ -f $GITHUB_WORKSPACE/files/static-device-names.hotplug ] && $INSTALL_BIN $GITHUB_WORKSPACE/files/static-device-names.hotplug /tmp/static-device-names/etc/hotplug.d/net/static-device-names
 [ -f $GITHUB_WORKSPACE/files/static-device-names.init ] && $INSTALL_BIN $GITHUB_WORKSPACE/files/static-device-names.init /tmp/static-device-names/etc/init.d/static-device-names
 [ -f $GITHUB_WORKSPACE/README.md ] && $INSTALL_DATA $GITHUB_WORKSPACE/README.md /tmp/static-device-names/usr/share/doc/static-device-names/
@@ -33,5 +35,6 @@ Section: ${SECTION}
 Installed-Size: 0
 Description:   This package contains a utility to automatically rename device names based on predetermined rules such as MAC addresses or PCI IDs.
 EOF
+echo "/etc/config/static-device-names" > /tmp/static-device-names/CONTROL/conffiles
 wget -O /tmp/ipkg-build https://raw.githubusercontent.com/openwrt/openwrt/master/scripts/ipkg-build && \
 chmod +x /tmp/ipkg-build && /tmp/ipkg-build -m "" /tmp/static-device-names /tmp
