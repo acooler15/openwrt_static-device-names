@@ -11,6 +11,6 @@ if [ "$ACTION" = "add" ] || [ "$ACTION" = "remove" ]; then
     config_load "static-device-names"
     config_get_bool enabled globals hotplug true
     if [ "$enabled" -eq 1 ] ; then
-        echo service static-device-names reload
+        service static-device-names reload
     fi
 fi

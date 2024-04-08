@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=static-device-names
 PKG_VERSION := 0.99.0
-PKG_RELEASE := 1
+PKG_RELEASE := 2
 
 PKG_MAINTAINER := Jean-Sebastien Trottier <jst@qualipsoft.com>
 PKG_LICENSE := GPL-3.0-or-later
